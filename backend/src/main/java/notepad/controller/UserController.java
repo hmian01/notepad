@@ -29,7 +29,7 @@ public class UserController {
     }
 
     // POST /api/users
-    @PostMapping
+    @PostMapping("/signup")
     public User newUser(@RequestBody User user) {
         return repo.save(user);
     }
