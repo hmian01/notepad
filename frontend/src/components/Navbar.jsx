@@ -24,14 +24,22 @@ export default function Navbar(){
             </h1>
             </Link>
 
-            <div className="space-x-4 mx-10">
+            <div className="flex items-center space-x-6 mx-10">
                 {user ? (
                     <>
-                        {location.pathname !== "/dashboard" && (
-                            <Link to="/dashboard" className="text-white mx-10 hover:text-indigo-400">Dashboard</Link>
-                        )}
-                        <span className="text-blue-500 mr-4">Welcome, {user.name}</span>
-                        <button onClick={handleLogout} className="px-3 py-1 bg-red-500 rounded hover:bg-red-600">Logout</button>
+                        <div className="flex items-center space-x-4 pr-6 border-r border-gray-700">
+                            {location.pathname !== "/dashboard" && 
+                                (<Link to="/dashboard" className="text-white hover:text-indigo-400">Dashboard</Link>
+                            )}
+                            {location.pathname !== "/create" && 
+                                (<Link to="/create" className="text-white hover:text-indigo-400">Create</Link>
+                            )}
+                            
+                        </div>
+                        <div className="flex items-center space-x-4">
+                            <span className="text-blue-500 mr-4">Welcome, {user.name}</span>
+                            <button onClick={handleLogout} className="px-3 py-1 bg-red-500 rounded hover:bg-red-600">Logout</button>
+                        </div>
                     </>
                 ) : (
                     <>

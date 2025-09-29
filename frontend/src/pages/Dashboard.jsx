@@ -21,27 +21,25 @@ export default function Dashboard() {
   if (error) return <p className="text-red-500">Error: {error}</p>;
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">
-        Welcome back, {user.name}!
-      </h1>
-
-      <h2 className="text-xl font-semibold mb-2">Your Notes</h2>
+    <div className="text-center min-h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-5">
+      <h1 className="text-3xl font-extrabold text-white mb-6 pt-15 pb-5">  Welcome back, {user.name}! </h1>
+      <h2 className="text-xl font-semibold text-white mb-6">Your Notes</h2>
       {notes.length === 0 ? (
-        <p>You have no notes yet.</p>
+        <p className="text-white text-lg">You have no notes yet.</p>
       ) : (
-        <ul className="space-y-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {notes.map(note => (
-            <li key={note.id} className="p-3 border rounded bg-white">
-              <h3 className="font-semibold">{note.title}</h3>
-              <p>{note.content}</p>
-              <span className="text-xs text-gray-500">
-                {note.isPrivate ? "Private" : "Public"}
-              </span>
-            </li>
+            <div key={note.id} className="card bg-base-100 shadow-xl hover:shadow-2xl transition hover:scale-105 duration-200">
+              <div className="card-body">
+                <h3 className="card-title justify-center">{note.title}</h3>
+                <p className="text-white">{note.content}</p>
+              </div>
+            </div>
           ))}
-        </ul>
-      )}
+        </div>
+        )}
+      <footer className="footer p-20"></footer>
     </div>
   );
+
 }
