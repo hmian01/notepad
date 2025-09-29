@@ -1,8 +1,12 @@
 package notepad.controller;
 
+import notepad.dto.UserDTO;
 import notepad.model.User;
 import notepad.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -38,5 +42,21 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
         repo.deleteById(id);
+    }
+
+    // POST /api/users/signin
+    @PostMapping("/signin")
+    public UserDTO signin(@RequestBody User loginRequest) {
+
+        // spring boot automatically knows to find user using email, do not need to create this function
+        User user = repo.findByEmail(loginRequest.getEmail())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        // plain text password check, will not go into production like this
+        if (!user.getPassword().equals(loginRequest.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
+        }
+
+        return new UserDTO(user.getName(), user.getEmail());
     }
 }

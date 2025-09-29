@@ -20,9 +20,11 @@ export default function SignIn() {
     if (!email || !password) return setMsg("email and password required");
 
     try {
-      await signin({ email, password }); // call to api.jsx
-      navigate("/dashboard");
-      formEl.reset();
+      const userDto = await signin({ email, password }); // call to api.jsx
+      console.log(userDto);
+      setMsg(`Welcome ${userDto.name}!`);
+      // navigate("/dashboard");
+      // formEl.reset();
     } catch (err) {
       setMsg(err.message);
     }
@@ -37,7 +39,7 @@ export default function SignIn() {
         <form className="flex flex-col gap-3" onSubmit={onSubmit}>
           <input name="email" type="email" placeholder="email" className="input input-bordered w-full"/>
           <input name="password" type="password" placeholder="password" className="input input-bordered w-full"/>
-          {msg && <p className="text-sm text-red-500">{msg}</p>} 
+          {msg && <p className="text-sm text-center text-red-500">{msg}</p>} 
           <button type="submit" className="btn btn-primary w-full">sign in</button>
         </form>
         <p className="text-center"> <br/>New to Notepad? <Link to="/signup" className="text-blue-400 underline">Create Account</Link></p>

@@ -21,6 +21,10 @@ export async function signin({ email, password }) {
     body: JSON.stringify({ email, password }),
   });
 
-  if (!res.ok) throw new Error("signin failed"); 
+  if (!res.ok) {
+    const errData = await res.json();
+    throw new Error(errData.message || "Signin failed");
+  }
+  
   return res.json().catch(() => ({}));
 }
