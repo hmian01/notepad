@@ -1,11 +1,10 @@
 import { Routes, Route, Link } from "react-router-dom";
+import Home from "./pages/Home.jsx";
 import SignUp from "./pages/SignUp.jsx";
 import SignIn from "./pages/SignIn.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
-
-function Home() { return <h1>Home</h1>; }
 
 function App() {
   return (

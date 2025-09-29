@@ -20,29 +20,30 @@ public class UserController {
         this.repo = repo;
     }
 
-    // GET /api/users
+    // GET /api/users --> will add security to this function
     @GetMapping
     public List<User> allUsers() {
         return repo.findAll();
     }
 
-    // GET /api/users/{id}
+    // GET /api/users/{id} --> will add security to this function
     @GetMapping("/{id}")
     public User oneUser(@PathVariable Long id) {
         return repo.findById(id).orElseThrow();
     }
 
-    // POST /api/users
+    // DELETE /api/users/{id} --> will add security to this function
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        repo.deleteById(id);
+    }
+
+        // POST /api/users
     @PostMapping("/signup")
     public User newUser(@RequestBody User user) {
         return repo.save(user);
     }
 
-    // DELETE /api/users/{id}
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
-        repo.deleteById(id);
-    }
 
     // POST /api/users/signin
     @PostMapping("/signin")
