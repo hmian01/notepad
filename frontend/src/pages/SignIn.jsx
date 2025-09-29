@@ -2,12 +2,17 @@
 import { useState } from "react";
 import { signin } from "../api"; 
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import { useContext } from "react";
 
 import "../index.css";
 
+
 export default function SignIn() {
 
+  const navigate = useNavigate();
   const [msg, setMsg] = useState(""); // message that will display to user
+  const { login } = useContext(AuthContext);
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -20,11 +25,10 @@ export default function SignIn() {
     if (!email || !password) return setMsg("email and password required");
 
     try {
-      const userDto = await signin({ email, password }); // call to api.jsx
-      console.log(userDto);
-      setMsg(`Welcome ${userDto.name}!`);
-      // navigate("/dashboard");
-      // formEl.reset();
+      const user = await signin({ email, password }); // call to api.jsx
+      login(user);
+      setMsg(`Welcome ${user.name}!`);
+      navigate("/dashboard");
     } catch (err) {
       setMsg(err.message);
     }
