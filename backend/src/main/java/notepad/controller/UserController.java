@@ -58,6 +58,6 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
         }
 
-        return new UserDTO(user.getName(), user.getEmail());
+        return new UserDTO(user.getName(), user.getEmail(), user.getId());
     }
 }

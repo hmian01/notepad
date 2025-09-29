@@ -1,6 +1,4 @@
 // api.jsx
-// convienent place to have all api related code (can change api link at once) 
-
 
 // routes signup api call to the backend
 export async function signup({ name, email, password }) {

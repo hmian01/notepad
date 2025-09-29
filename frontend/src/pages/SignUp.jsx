@@ -1,6 +1,6 @@
 // src/pages/SignUp.jsx
 import { useState } from "react";
-import { signup } from "../api"; 
+import { signup } from "../api/authApi"; 
 import "../index.css";
 
 export default function SignUp() {
