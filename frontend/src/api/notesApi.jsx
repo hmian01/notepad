@@ -1,7 +1,9 @@
 
 
 export async function loadDashboard(userId) {
-  const res = await fetch(`/api/notes/user/${userId}`);
+  const res = await fetch(`/api/notes/user/${userId}`, {
+    method: "GET",
+  });
   if (!res.ok) {
     throw new Error("Failed to fetch notes");
   }
@@ -19,3 +21,15 @@ export async function addNote(userId, note) {
   }
   return res.json();
 }
+
+export async function getNote(noteId) {
+  const res = await fetch(`/api/notes/${noteId}`, {
+    method: "GET",
+    // headers: { "Content-Type": "application/json" },
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to get note #${noteId}`);
+  }
+  return res.json();
+}
+
