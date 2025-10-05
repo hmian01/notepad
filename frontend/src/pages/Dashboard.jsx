@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { loadDashboard } from "../api/notesApi";
@@ -29,12 +30,20 @@ export default function Dashboard() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {notes.map(note => (
-            <div key={note.id} className="card bg-base-100 shadow-xl hover:shadow-2xl transition hover:scale-105 duration-200">
-              <div className="card-body">
-                <h3 className="card-title justify-center">{note.title}</h3>
-                <p className="text-white">{note.content}</p>
+            <Link to={`/note/${note.id}`} className="block">
+              <div key={note.id} className="card bg-base-100 shadow-xl hover:shadow-2xl transition hover:scale-105 duration-200">
+                <div className="card-body">
+                  <h3 className="card-title justify-center">{note.title}</h3>
+
+                  <p className="text-white">{note.content}</p>
+                  
+                  <Link to={`/note/${note.id}/edit`} className="btn btn-sm absolute bottom-3 right-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md px-3 py-1">
+                    Edit
+                  </Link>
+
+                </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
         )}

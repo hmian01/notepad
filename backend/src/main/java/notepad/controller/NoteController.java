@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/notes") // prefix
@@ -46,15 +47,33 @@ public class NoteController {
     @GetMapping("/user/{userId}")
     public List<NoteDTO> getNotesForUser(@PathVariable Long userId) {
         User user = userRepo.findById(userId).orElseThrow();
-        return noteRepo.findByUser(user).stream().map(NoteDTO::new).toList();
+        return noteRepo.findByUserOrderByIdAsc(user).stream().map(NoteDTO::new).toList(); // TODO: change this to sort based on most recently updated first
     }
 
     // POST /api/notes/user/{userId} --> add a note for a user --> will add security to this function
-    @PostMapping("/user/{userId}")
-    public NoteDTO addNoteForUser(@PathVariable Long userId, @RequestBody Note note) {
+    @PostMapping
+    public NoteDTO addNote(@RequestParam Long userId, @RequestBody Note note) {
         User user = userRepo.findById(userId).orElseThrow();
         note.setUser(user);
         Note saved = noteRepo.save(note);
         return new NoteDTO(saved);
     }
+
+    @PatchMapping("{id}")
+    public NoteDTO editNote(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+
+        Note previous = noteRepo.findById(id).orElseThrow();
+
+        if (updates.containsKey("title"))
+            previous.setTitle((String) updates.get("title"));
+        if (updates.containsKey("content"))
+            previous.setContent((String) updates.get("content"));
+        if (updates.containsKey("isPrivate"))
+            previous.setIsPrivate((Boolean) updates.get("isPrivate"));
+
+        Note saved = noteRepo.save(previous);
+
+        return new NoteDTO(saved);
+    }
+
 }
