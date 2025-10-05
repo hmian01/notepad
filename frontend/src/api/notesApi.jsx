@@ -45,3 +45,13 @@ export async function updateNote(id, updates) {
   return res.json();
 }
 
+export async function deleteNote(id) {
+  const res = await fetch(`/api/notes/${id}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to delete note #${id}`);
+  }
+  return res;
+}

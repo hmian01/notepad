@@ -1,13 +1,17 @@
 
 import "../index.css";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getNote } from "../api/notesApi";
+import { getNote, deleteNote } from "../api/notesApi";
+
 
 export default function Note() {
 
     const { id } = useParams();
+    const navigate = useNavigate();
+
     const [note, setNote] = useState(null);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
 
     useEffect(() => {
@@ -15,6 +19,15 @@ export default function Note() {
             .then(setNote)
             .catch(console.error);
     }, [id]);
+
+    async function handleDelete(e) {
+        try {
+            await deleteNote(id);
+            navigate("/dashboard");
+        } catch (err) {
+            console.error("Error deleting note", err);
+        }
+    };
 
 
     return (
@@ -27,11 +40,28 @@ export default function Note() {
                 <div className="bg-base-100 p-4 rounded-2xl">
                     <p className="text-center break-words leading-relaxed whitespace-pre-line">{note.content}</p>
                 </div>
-                <div className="card-actions justify-end mt-5"> 
+                <div className="card-actions justify-between mt-5">
+                    <button className="btn btn-sm btn-error normal-case py-5 text-white" onClick={() => setShowDeleteModal(true)}>Delete</button>
                     <Link to={`/note/${note.id}/edit`} className="btn btn-primary">
                         Edit
                     </Link>
                 </div>
+
+                {showDeleteModal && (
+                    <dialog open className="modal modal-open">
+                        <div className="modal-box bg-base-200">
+                            <h3 className="font-bold text-lg text-white text-center">Confirm Deletion</h3>
+                            <div className="bg-base-100 p-2 mt-5 rounded-2xl">
+                                <p className="py-4 text-white">Are you sure you want to permanently delete this note?</p>
+                            </div>
+                            <div className="modal-action">
+                                <button className="btn" onClick={() => setShowDeleteModal(false)}>Cancel</button>
+                                <button className="btn btn-error text-white" onClick={handleDelete}>Yes, Delete</button>
+                            </div>
+                        </div>
+                    </dialog>
+                )}
+
             </>
             ) : (
             <div className="flex justify-center">
