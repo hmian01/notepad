@@ -36,8 +36,7 @@ export default function Create() {
       <div className="card w-full max-w-xl bg-base-100 shadow-xl">
         <div className="card-body">
             <h1 className="card-title text-2xl justify-center mb-6">Create Note</h1>
-          {msg && <p className="text-red-500">{msg}</p>}
-
+          
           <form onSubmit={handleSubmit} className="flex flex-col">
 
             <label className="block mb-2 text-lg font-semibold">Title</label>
@@ -52,7 +51,7 @@ export default function Create() {
             </label>
 
             <button type="submit" className="btn btn-primary w-full mt-6">Create Note</button>
-
+            {msg && <p className="text-red-500 mt-3">{msg}</p>}
           </form>
         </div>
       </div>
