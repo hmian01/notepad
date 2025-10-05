@@ -1,10 +1,12 @@
 package notepad.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 
 @Entity
@@ -19,8 +21,10 @@ public class Note {
     @JoinColumn(name = "user_id", nullable = false) // foreign key
     private User user;
 
+    @Column(columnDefinition = "TEXT")
     private String title;
     private String content;
+
     private Boolean isPrivate = true; // defaults to private
 
     // getters and setters
