@@ -25,7 +25,7 @@ export default function Note() {
             <>
             <h1 className="card-title text-3xl text-primary justify-center mb-6">{note.title}</h1>
                 <div className="bg-base-100 p-4 rounded-2xl">
-                    <p className="text-center break-words leading-relaxed">{note.content}</p>
+                    <p className="text-center break-words leading-relaxed whitespace-pre-line">{note.content}</p>
                 </div>
                 <div className="card-actions justify-end mt-5"> 
                     <Link to={`/note/${note.id}/edit`} className="btn btn-primary">
