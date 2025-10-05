@@ -26,19 +26,26 @@ public class UserController {
     // GET /api/users --> will add security to this function
     @GetMapping
     public List<User> allUsers() {
+
+        // TODO: return the UserDTO instead of unsecure User
         return repo.findAll();
     }
 
     // GET /api/users/{id} --> will add security to this function
     @GetMapping("/{id}")
     public User oneUser(@PathVariable Long id) {
-        return repo.findById(id).orElseThrow();
+
+        User user = repo.findById(id).orElseThrow();
+
+        // TODO: return the UserDTO instead of unsecure User
+        return user;
     }
 
     // DELETE /api/users/{id} --> will add security to this function
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
         repo.deleteById(id);
+        // TODO: return error if user does not exist
     }
 
         // POST /api/users

@@ -1,8 +1,10 @@
 spring:
+  config:
+    import: optional:file:.env
   datasource:
-    url: jdbc:postgresql://localhost:5433/notepadDB # port of the docker postgres
-    username: app
-    password: password
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update

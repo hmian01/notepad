@@ -3,9 +3,9 @@ services:
     image: postgres:16
     container_name: notepad_postgres
     environment:
-      POSTGRES_DB: notepadDB
-      POSTGRES_USER: app
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
     ports:
       - "5433:5432" # putting docker postgres db on 5433 to resolve conflict with local postgres 
     volumes:
