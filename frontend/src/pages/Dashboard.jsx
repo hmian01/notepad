@@ -31,15 +31,18 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {notes.map(note => (
             <Link to={`/note/${note.id}`} className="block">
-              <div key={note.id} className="card bg-base-100 shadow-xl hover:shadow-2xl transition hover:scale-105 duration-200">
-                <div className="card-body">
-                  <h3 className="card-title justify-center">{note.title}</h3>
+              <div key={note.id} className="card h-64 bg-base-200 shadow-xl hover:shadow-2xl transition hover:scale-105 duration-200">
+                <div className="card-body flex flex-col justify-between">
 
-                  <p className="text-white">{note.content}</p>
-                  
-                  <Link to={`/note/${note.id}/edit`} className="btn btn-sm absolute bottom-3 right-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md px-3 py-1">
-                    Edit
-                  </Link>
+                  <h3 className="card-title justify-center">{note.title}</h3>
+                  <div className="bg-base-100 p-4 rounded-2xl">
+                    <p className="text-sm text-white-300 line-clamp-5 break-words">{note.content}</p>
+                  </div>
+                  <div className="card-actions justify-end mt-2"> 
+                    <Link to={`/note/${note.id}/edit`} className="btn btn-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-md px-3 py-1">
+                      Edit
+                    </Link>
+                  </div>
 
                 </div>
               </div>
