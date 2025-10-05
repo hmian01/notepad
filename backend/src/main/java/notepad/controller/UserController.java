@@ -6,6 +6,8 @@ import notepad.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.List;
 public class UserController {
 
     private final UserRepository repo;
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public UserController(UserRepository repo) {
         this.repo = repo;
@@ -40,8 +43,17 @@ public class UserController {
 
         // POST /api/users
     @PostMapping("/signup")
-    public User newUser(@RequestBody User user) {
-        return repo.save(user);
+    public UserDTO newUser(@RequestBody User user) {
+
+        if (repo.findByEmail(user.getEmail()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already registered");
+        }
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        User newUser = repo.save(user);
+
+        return new UserDTO(newUser.getName(), newUser.getEmail(), newUser.getId());
     }
 
 
@@ -53,8 +65,8 @@ public class UserController {
         User user = repo.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
-        // plain text password check, will not go into production like this
-        if (!user.getPassword().equals(loginRequest.getPassword())) {
+        // hashed password check, more secure than plain text check
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
         }
 
