@@ -36,7 +36,7 @@ export default function Dashboard() {
 
                   <h3 className="card-title justify-center">{note.title}</h3>
                   <div className="bg-base-100 p-4 rounded-2xl">
-                    <p className="text-sm text-white-300 line-clamp-5 break-words">{note.content}</p>
+                    <p className="text-sm text-white-300 line-clamp-5 break-words whitespace-pre-line">{note.content}</p>
                   </div>
                   <div className="card-actions justify-end mt-2"> 
                     <Link to={`/note/${note.id}/edit`} className="btn btn-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-md px-3 py-1">

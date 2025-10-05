@@ -38,7 +38,7 @@ export default function Navbar(){
                         </div>
                         <div className="flex items-center space-x-4">
                             <span className="text-blue-500 mr-4">Welcome, {user.name}</span>
-                            <button onClick={handleLogout} className="px-3 py-1 bg-red-500 rounded hover:bg-red-600">Logout</button>
+                            <button onClick={handleLogout} className="btn btn-error text-white px-3">Logout</button>
                         </div>
                     </>
                 ) : (
