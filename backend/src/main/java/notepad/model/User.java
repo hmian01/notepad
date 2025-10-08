@@ -1,5 +1,6 @@
 package notepad.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,7 +9,7 @@ import jakarta.persistence.Table;
 
 // creates table in the DB
 @Entity
-@Table(name = "users") // can't be named user
+@Table(name = "users") // can't be named user, can be a reserved keyword in some DBMS
 public class User {
 
     @Id // primary key
@@ -16,12 +17,13 @@ public class User {
     private Long id;
 
     private String name;
+
+    @Column(unique = true)
     private String email;
     private String password;
 
     // getters and setters
     public Long getId(){return id;}
-    public void setId(Long id){this.id = id;}
 
     public String getName(){return name;}
     public void setName(String name){this.name = name;}

@@ -27,7 +27,7 @@ public class UserController {
     @GetMapping
     public List<User> allUsers() {
 
-        // TODO: return the UserDTO instead of unsecure User
+        // TODO: return the UserDTO instead of unsecure User object
         return repo.findAll();
     }
 
@@ -37,7 +37,7 @@ public class UserController {
 
         User user = repo.findById(id).orElseThrow();
 
-        // TODO: return the UserDTO instead of unsecure User
+        // TODO: return the UserDTO instead of unsecure User object
         return user;
     }
 
@@ -48,7 +48,7 @@ public class UserController {
         // TODO: return error if user does not exist
     }
 
-        // POST /api/users
+    // POST /api/users
     @PostMapping("/signup")
     public UserDTO newUser(@RequestBody User user) {
 
