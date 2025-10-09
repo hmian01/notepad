@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getNote, updateNote } from "../api/notesApi";
 
 export default function Create() {
-    // const { user } = useContext(AuthContext); // logged in user --> TODO: will be used later
+    const { auth } = useContext(AuthContext);
 
     const { id } = useParams();
     const navigate = useNavigate();
@@ -20,7 +20,7 @@ export default function Create() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        getNote(id)
+        getNote(auth, id)
             .then((data) =>{
                 setNote({
                     title: data.title,
@@ -36,7 +36,7 @@ export default function Create() {
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            await updateNote(id, {
+            await updateNote(auth, id, {
                 title: note.title,
                 content: note.content,
                 isPrivate: note.isPrivate,

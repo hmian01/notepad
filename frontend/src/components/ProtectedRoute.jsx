@@ -2,9 +2,9 @@
 import { Navigate } from "react-router-dom";
 
 export default function ProtectedRoute({ children }) {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const auth = JSON.parse(localStorage.getItem("auth"));
 
-  if (!user) {
+  if (!auth) {
     // not signed in, send user to login
     return <Navigate to="/signin" replace />;
   }

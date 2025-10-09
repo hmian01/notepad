@@ -1,7 +1,7 @@
 package notepad.controller;
 
 import notepad.JwtService;
-import notepad.dto.JwtResponseDTO;
+import notepad.dto.AuthResponseDTO;
 import notepad.dto.UserDTO;
 import notepad.model.User;
 import notepad.repository.UserRepository;
@@ -71,7 +71,7 @@ public class UserController {
 
     // POST /api/users/signin
     @PostMapping("/signin")
-    public JwtResponseDTO signin(@RequestBody User loginRequest) {
+    public AuthResponseDTO signin(@RequestBody User loginRequest) {
 
         // spring boot automatically knows to find user using email, do not need to create this function
         User user = repo.findByEmail(loginRequest.getEmail())
@@ -81,10 +81,7 @@ public class UserController {
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
         }
-
-        String jwtToken = jwtService.createToken(user.getEmail());
-        Date expiration = jwtService.extractExpiration(jwtToken);
-
-        return new JwtResponseDTO(jwtToken, expiration);
+        
+        return new AuthResponseDTO(user, jwtService); // returns jwt token, expiry, email, name
     }
 }

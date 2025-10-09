@@ -6,7 +6,7 @@ export default function Navbar(){
 
     const location = useLocation();
     const navigate = useNavigate();
-    const { user, logout } = useContext(AuthContext);
+    const { auth, logout } = useContext(AuthContext);
 
     const handleLogout = () => {
         logout();
@@ -25,7 +25,7 @@ export default function Navbar(){
             </Link>
 
             <div className="flex items-center space-x-6 mx-10">
-                {user ? (
+                {auth ? (
                     <>
                         <div className="flex items-center space-x-4 pr-6 border-r border-gray-700">
                             {location.pathname !== "/dashboard" && 
@@ -37,7 +37,7 @@ export default function Navbar(){
                             
                         </div>
                         <div className="flex items-center space-x-4">
-                            <span className="text-blue-500 mr-4">Welcome, {user.name}</span>
+                            <span className="text-blue-500 mr-4">Welcome, {auth.name}</span>
                             <button onClick={handleLogout} className="btn btn-error text-white px-3">Logout</button>
                         </div>
                     </>

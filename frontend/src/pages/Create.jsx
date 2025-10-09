@@ -4,7 +4,7 @@ import { addNote } from "../api/notesApi";
 import { useNavigate } from "react-router-dom";
 
 export default function Create() {
-  const { user } = useContext(AuthContext); // logged in user
+  const { auth } = useContext(AuthContext); // session detail for logged in user
   const navigate = useNavigate();
   
   const [title, setTitle] = useState("");
@@ -17,7 +17,7 @@ export default function Create() {
     setMsg("");
 
     try {
-      const newNote = await addNote(user.id, {
+      const newNote = await addNote(auth, {
         title,
         content,
         isPrivate,
@@ -29,7 +29,7 @@ export default function Create() {
     }
   }
 
-  if (!user) return <p>Please sign in to create notes.</p>;
+  if (!auth) return <p>Please sign in to create notes.</p>;
 
   return (
       <div className="min-h-screen flex items-start justify-center bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-15">

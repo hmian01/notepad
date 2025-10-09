@@ -1,28 +1,29 @@
 
 import "../index.css";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { getNote, deleteNote } from "../api/notesApi";
-
+import { AuthContext } from "../context/AuthContext";
 
 export default function Note() {
 
+    const { auth } = useContext(AuthContext);
     const { id } = useParams();
     const navigate = useNavigate();
-
+    
     const [note, setNote] = useState(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-
     useEffect(() => {
-        getNote(id)
-            .then(setNote)
-            .catch(console.error);
-    }, [id]);
+        if (auth)
+            getNote(auth, id)
+                .then(setNote)
+                .catch(console.error);
+    }, [auth, id]);
 
     async function handleDelete(e) {
         try {
-            await deleteNote(id);
+            await deleteNote(auth, id);
             navigate("/dashboard");
         } catch (err) {
             console.error("Error deleting note", err);

@@ -25,9 +25,9 @@ export default function SignIn() {
     if (!email || !password) return setMsg("email and password required");
 
     try {
-      const user = await signin({ email, password }); // call to api.jsx
-      login(user);
-      setMsg(`Welcome ${user.name}!`);
+      const auth = await signin({ email, password }); // call to api.jsx, returns AuthResponseDTO
+      login(auth);
+      setMsg(`Welcome ${auth.name}!`); // doesnt really render, automatically goes to dash
       navigate("/dashboard");
     } catch (err) {
       setMsg(err.message);
