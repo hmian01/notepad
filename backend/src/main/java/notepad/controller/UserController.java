@@ -1,16 +1,20 @@
 package notepad.controller;
 
+import notepad.JwtService;
+import notepad.dto.JwtResponseDTO;
 import notepad.dto.UserDTO;
 import notepad.model.User;
 import notepad.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.config.annotation.authentication.configurers.userdetails.DaoAuthenticationConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/api/users") // prefix
@@ -18,9 +22,11 @@ public class UserController {
 
     private final UserRepository repo;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final JwtService jwtService;
 
-    public UserController(UserRepository repo) {
+    public UserController(UserRepository repo, JwtService jwtService) {
         this.repo = repo;
+        this.jwtService = jwtService;
     }
 
     // GET /api/users --> will add security to this function
@@ -63,10 +69,9 @@ public class UserController {
         return new UserDTO(newUser.getName(), newUser.getEmail(), newUser.getId());
     }
 
-
     // POST /api/users/signin
     @PostMapping("/signin")
-    public UserDTO signin(@RequestBody User loginRequest) {
+    public JwtResponseDTO signin(@RequestBody User loginRequest) {
 
         // spring boot automatically knows to find user using email, do not need to create this function
         User user = repo.findByEmail(loginRequest.getEmail())
@@ -77,6 +82,9 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
         }
 
-        return new UserDTO(user.getName(), user.getEmail(), user.getId());
+        String jwtToken = jwtService.createToken(user.getEmail());
+        Date expiration = jwtService.extractExpiration(jwtToken);
+
+        return new JwtResponseDTO(jwtToken, expiration);
     }
 }
