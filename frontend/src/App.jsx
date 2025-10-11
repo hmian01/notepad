@@ -12,6 +12,8 @@ import PublicNote from "./pages/PublicNote.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
 
+// TODO: make interfaces look more modern
+
 function App() {
   return (
     <>

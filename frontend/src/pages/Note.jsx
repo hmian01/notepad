@@ -5,6 +5,8 @@ import { useState, useEffect, useContext } from "react";
 import { getNote, deleteNote } from "../api/notesApi";
 import { AuthContext } from "../context/AuthContext";
 
+// TODO: add icon to copy the entire note context to clipboard
+
 export default function Note() {
 
     const { auth } = useContext(AuthContext);

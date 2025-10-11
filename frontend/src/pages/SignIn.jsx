@@ -7,6 +7,8 @@ import { useContext } from "react";
 
 import "../index.css";
 
+// TODO: add animations and error handling to the signin/signup buttons 
+// TODO: add automatic routing after successful signup to signin
 
 export default function SignIn() {
 
