@@ -16,6 +16,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String userType = "user";
+
     private String name;
 
     @Column(unique = true)
@@ -24,6 +26,7 @@ public class User {
 
     // getters and setters
     public Long getId(){return id;}
+    public String getUserType(){return userType;}
 
     public String getName(){return name;}
     public void setName(String name){this.name = name;}

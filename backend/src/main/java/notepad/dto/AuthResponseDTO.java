@@ -12,6 +12,7 @@ public class AuthResponseDTO {
     private String email;
     private String name;
     private Long userId;
+    private String userType;
 
     public AuthResponseDTO(User user, JwtService jwtService ) {
         this.jwtToken = jwtService.createToken(user.getEmail());
@@ -19,6 +20,7 @@ public class AuthResponseDTO {
         this.email = user.getEmail();
         this.name = user.getName();
         this.userId = user.getId();
+        this.userType = user.getUserType();
     }
 
     public String getToken() {
@@ -39,5 +41,9 @@ public class AuthResponseDTO {
 
     public Long getUserId() {
         return userId;
+    }
+
+    public String getUserType() {
+        return userType;
     }
 }

@@ -28,8 +28,8 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // disable CSRF for REST APIs
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/users/signup", "/api/users/signin").permitAll() // allow signup/signin
+                .requestMatchers("/error").permitAll()
                 .anyRequest().authenticated() // any other request requires JWT authentication
-                // .anyRequest().permitAll() // (optional) allow all endpoints while developing
             )
             .httpBasic(httpBasic -> httpBasic.disable()) // disable default Basic Auth popup
             .formLogin(form -> form.disable()) // disable Spring’s login form

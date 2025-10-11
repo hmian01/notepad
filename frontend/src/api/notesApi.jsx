@@ -1,6 +1,6 @@
 
 export async function loadDashboard(auth) {
-  const res = await fetch(`/api/notes/user/${auth.userId}`, {
+  const res = await fetch(`/api/notes`, {
     method: "GET",
     headers: { "Content-Type": "application/json", "Authorization" : `Bearer ${auth.token}`},
   });
@@ -11,7 +11,7 @@ export async function loadDashboard(auth) {
 }
 
 export async function addNote(auth, note) {
-  const res = await fetch(`/api/notes?userId=${auth.userId}`, {
+  const res = await fetch(`/api/notes`, {
     method: "POST",
     headers: { "Content-Type": "application/json", "Authorization" : `Bearer ${auth.token}`},
     body: JSON.stringify(note),

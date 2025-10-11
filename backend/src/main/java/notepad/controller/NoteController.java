@@ -8,6 +8,7 @@ import notepad.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -25,55 +26,88 @@ public class NoteController {
         this.userRepo = userRepo;
     }
 
-    // GET /api/notes --> will add security to this function
-    @GetMapping
+    private User getAuthenticatedUser() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName(); // returns the email from jwt
+        return userRepo.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found"));
+    }
+
+    private void ensureAdmin() {
+        User user = getAuthenticatedUser();
+        if (!user.getUserType().equals("admin"))
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only admin may perform this action"); 
+    }
+
+    // ADMIN: get all notes across every user (for testing only)
+    @GetMapping("/all")
     public List<NoteDTO> allNotes() {
+        ensureAdmin();
         return noteRepo.findAll().stream().map(NoteDTO::new).toList();
     }
 
-    // GET /api/notes/{id} --> will add security to this function
+    // USER: get specific note
     @GetMapping("/{id}")
     public NoteDTO oneNote(@PathVariable Long id) {
-        return noteRepo.findById(id).map(NoteDTO::new).orElseThrow();
+        
+        User user = getAuthenticatedUser();
+        Note note = noteRepo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Note not found"));
+
+        if (!note.getUser().getEmail().equals(user.getEmail())) 
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have access to this note"); 
+
+        return new NoteDTO(note);
     }
 
-    // DELETE /api/notes/{id} --> will add security to this function
+    // USER: delete specific note
     @DeleteMapping("/{id}")
     public void deleteNote(@PathVariable Long id) {
-        noteRepo.deleteById(id);
+
+        User user = getAuthenticatedUser();
+        Note note = noteRepo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Note not found"));
+
+        if (!note.getUser().getEmail().equals(user.getEmail())) 
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have access to this note"); 
+
+        noteRepo.delete(note);
     }
 
-    // GET /api/notes/user/{userId} --> all private/public notes of the specified user --> will add security to this function
-    @GetMapping("/user/{userId}")
-    public List<NoteDTO> getNotesForUser(@PathVariable Long userId) {
-        User user = userRepo.findById(userId).orElseThrow();
+    // USER: get all user notes (dashboard)
+    @GetMapping
+    public List<NoteDTO> getNotesForUser() {
+        User user = getAuthenticatedUser();
+
         return noteRepo.findByUserOrderByIdAsc(user).stream().map(NoteDTO::new).toList(); // TODO: change this to sort based on most recently updated first
     }
 
-    // POST /api/notes/user/{userId} --> add a note for a user --> will add security to this function
+    // USER: create new note
     @PostMapping
-    public NoteDTO addNote(@RequestParam Long userId, @RequestBody Note note) {
-        User user = userRepo.findById(userId).orElseThrow();
+    public NoteDTO addNote(@RequestBody Note note) {
+        User user = getAuthenticatedUser();
         note.setUser(user);
         Note saved = noteRepo.save(note);
         return new NoteDTO(saved);
     }
 
+    // USER: edit note
     @PatchMapping("{id}")
     public NoteDTO editNote(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
 
-        Note previous = noteRepo.findById(id).orElseThrow();
+        User user = getAuthenticatedUser();
+        Note note = noteRepo.findById(id).orElseThrow();
+
+        if (!note.getUser().getEmail().equals(user.getEmail())) 
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have access to this note"); 
 
         if (updates.containsKey("title"))
-            previous.setTitle((String) updates.get("title"));
+            note.setTitle((String) updates.get("title"));
         if (updates.containsKey("content"))
-            previous.setContent((String) updates.get("content"));
+            note.setContent((String) updates.get("content"));
         if (updates.containsKey("isPrivate"))
-            previous.setIsPrivate((Boolean) updates.get("isPrivate"));
+            note.setIsPrivate((Boolean) updates.get("isPrivate"));
 
-        Note saved = noteRepo.save(previous);
+        noteRepo.save(note);
 
-        return new NoteDTO(saved);
+        return new NoteDTO(note);
     }
 
 }
