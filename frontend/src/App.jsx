@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard.jsx";
 import Create from "./pages/Create.jsx";
 import Note from "./pages/Note.jsx";
 import EditNote from "./pages/Edit.jsx";
+import PublicNote from "./pages/PublicNote.jsx";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
@@ -26,6 +27,8 @@ function App() {
 
         <Route path="/note/:id" element={<ProtectedRoute> <Note/> </ProtectedRoute>}/>
         <Route path="/note/:id/edit" element={<ProtectedRoute> <EditNote/> </ProtectedRoute>}/>
+
+        <Route path="/public/:publicId" element={<PublicNote/>}/>
 
         <Route path="*" element={<div>404</div>} />
       </Routes>

@@ -9,6 +9,7 @@ export default function Note() {
 
     const { auth } = useContext(AuthContext);
     const { id } = useParams();
+    const [copied, setCopied] = useState(false);
     const navigate = useNavigate();
     
     const [note, setNote] = useState(null);
@@ -30,6 +31,17 @@ export default function Note() {
         }
     };
 
+    const handleCopy = async () => {
+        const link = `${window.location.origin}/public/${note.publicId}`;
+        try {
+            await navigator.clipboard.writeText(link);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 1000);
+        } catch (err) {
+            console.error("Failed to copy:", err);
+        }
+    };
+
 
     return (
         <div className="min-h-screen flex items-start justify-center bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-15">
@@ -42,10 +54,19 @@ export default function Note() {
                     <p className="text-center break-words leading-relaxed whitespace-pre-line">{note.content}</p>
                 </div>
                 <div className="card-actions justify-between mt-5">
-                    <button className="btn btn-sm btn-error normal-case py-5 text-white" onClick={() => setShowDeleteModal(true)}>Delete</button>
+                    
+                    
+                    <div>
+                        <button className="btn btn-sm btn-error normal-case py-5 text-white" onClick={() => setShowDeleteModal(true)}>Delete</button>
+                        {!note.isPrivate && <button className={`btn ${copied ? "btn-success" : "btn-primary"} ml-5`} onClick={handleCopy}>
+                            {copied ? "Copied Link!" : "Copy Public Link"}
+                        </button>}
+                    </div>
+
                     <Link to={`/note/${note.id}/edit`} className="btn btn-primary">
                         Edit
                     </Link>
+                    
                 </div>
 
                 {showDeleteModal && (

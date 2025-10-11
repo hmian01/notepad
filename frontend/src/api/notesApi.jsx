@@ -55,3 +55,13 @@ export async function deleteNote(auth, id) {
   }
   return res;
 }
+
+export async function getPublicNote(publicId) {
+  const res = await fetch(`/api/notes/public/${publicId}`, {
+    method: "GET",
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to get note #${publicId}`);
+  }
+  return res.json();
+}
