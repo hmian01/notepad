@@ -8,11 +8,13 @@ import notepad.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/notes") // prefix
@@ -84,6 +86,13 @@ public class NoteController {
     public NoteDTO addNote(@RequestBody Note note) {
         User user = getAuthenticatedUser();
         note.setUser(user);
+
+        String publicId;
+        do {
+            publicId = UUID.randomUUID().toString().substring(0, 8);
+        } while (noteRepo.existsByPublicId(publicId));
+        note.setPublicId(publicId);
+
         Note saved = noteRepo.save(note);
         return new NoteDTO(saved);
     }
@@ -102,12 +111,23 @@ public class NoteController {
             note.setTitle((String) updates.get("title"));
         if (updates.containsKey("content"))
             note.setContent((String) updates.get("content"));
-        if (updates.containsKey("isPrivate"))
-            note.setIsPrivate((Boolean) updates.get("isPrivate"));
-
+        if (updates.containsKey("isPrivate")) {
+            note.setIsPrivate((Boolean) updates.get("isPrivate")); // TODO: consider adding logic to cycle publicId if isPrivate settings changes
+        }
+            
         noteRepo.save(note);
 
         return new NoteDTO(note);
     }
 
+    // USER: access public note
+    @GetMapping("/public/{publicId}")
+    public NoteDTO getPublicNote(@PathVariable String publicId) {
+
+        Note note = noteRepo.findByPublicId(publicId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Note not found"));
+        if (note.getIsPrivate())
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Note is not public");
+
+        return new NoteDTO(note);
+    }
 }

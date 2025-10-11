@@ -29,6 +29,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/users/signup", "/api/users/signin").permitAll() // allow signup/signin
                 .requestMatchers("/error").permitAll()
+                .requestMatchers("/api/notes/public/*").permitAll()
                 .anyRequest().authenticated() // any other request requires JWT authentication
             )
             .httpBasic(httpBasic -> httpBasic.disable()) // disable default Basic Auth popup

@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 
 @Entity
 public class Note {
@@ -27,9 +28,11 @@ public class Note {
 
     private Boolean isPrivate = true; // defaults to private
 
+    @Column(unique = true)
+    private String publicId;    
+
     // getters and setters
     public Long getId(){return id;}
-    public void setId(Long id){this.id = id;}
 
     public String getTitle(){return title;}
     public void setTitle(String title){this.title = title;}
@@ -42,4 +45,8 @@ public class Note {
 
     public Boolean getIsPrivate() { return isPrivate; }
     public void setIsPrivate(Boolean isPrivate) {this.isPrivate = isPrivate;}
+
+    public String getPublicId(){return publicId;}
+    public void setPublicId(String publicId) {this.publicId = publicId;}
+
 }

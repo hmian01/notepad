@@ -8,9 +8,8 @@ public class NoteDTO {
     private String title;
     private String content;
     private Boolean isPrivate;
-
-    private Long userId;
     private String userName;
+    private String publicId;    
 
 
     public NoteDTO(Note note) {
@@ -18,8 +17,8 @@ public class NoteDTO {
         this.title = note.getTitle();
         this.content = note.getContent();
         this.isPrivate = note.getIsPrivate();
-        this.userId = note.getUser().getId();
         this.userName = note.getUser().getName();
+        this.publicId = note.getPublicId();
     }
 
     public Long getId(){return id;}
@@ -34,9 +33,9 @@ public class NoteDTO {
     public Boolean getIsPrivate() { return isPrivate; }
     public void getIsPrivate(Boolean isPrivate) {this.isPrivate = isPrivate;}
 
-    public Long getUserId() { return userId; }
-    public void setUserId(Long userId) { this.userId = userId; }
-
     public String getUserName() { return userName; }
     public void setUserName(String userName) { this.userName = userName; }
+
+    public String getPublicId() { return publicId; }
+    public void setPublicId(String publicId) { this.publicId = publicId; }
 }
