@@ -8,7 +8,6 @@ import notepad.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.server.ResponseStatusException;
 

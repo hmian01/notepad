@@ -2,21 +2,18 @@ package notepad.controller;
 
 import notepad.JwtService;
 import notepad.dto.AuthResponseDTO;
-import notepad.dto.NoteDTO;
 import notepad.dto.UserDTO;
 import notepad.model.User;
 import notepad.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.security.config.annotation.authentication.configurers.userdetails.DaoAuthenticationConfigurer;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Date;
 
 @RestController
 @RequestMapping("/api/users") // prefix
