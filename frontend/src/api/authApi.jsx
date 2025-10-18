@@ -1,28 +1,17 @@
 // api.jsx
+import axios from 'axios';
 
-// routes signup api call to the backend
-export async function signup({ name, email, password }) {
-  const res = await fetch("/api/users/signup", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, email, password }),
-  });
+const api = axios.create({
+  baseURL: 'http://localhost:8080/',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
-  if (!res.ok) throw new Error("signup failed"); 
-  return res.json().catch(() => ({}));
+export function signup(name, email, password) {
+  return api.post('/api/users/signup', { name, email, password });
 }
 
-export async function signin({ email, password }) {
-  const res = await fetch("/api/users/signin", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
-  });
-
-  if (!res.ok) {
-    const errData = await res.json();
-    throw new Error(errData.message || "Signin failed");
-  }
-  
-  return res.json().catch(() => ({}));
+export function signin(email, password) {
+  return api.post('/api/users/signin', { email, password });
 }

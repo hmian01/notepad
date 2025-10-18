@@ -1,30 +1,39 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signup } from "../api/authApi";
+import { motion, AnimatePresence } from "framer-motion";
 import "../index.css";
 
+
 export default function SignUp() {
-  const [msg, setMsg] = useState("");
+  const [status, setStatus] = useState("idle"); // idle | loading | success | conflict | error
+  const navigate = useNavigate();
 
   async function onSubmit(e) {
     e.preventDefault();
-    setMsg("");
 
     const formEl = e.currentTarget;
     const form = new FormData(formEl);
     const name = form.get("name");
     const email = form.get("email");
     const password = form.get("password");
-    if (!name) return setMsg("name required");
-    if (!email || !password) return setMsg("email and password required");
 
-    try {
-      await signup({ name, email, password });
-      setMsg("Account created ✔");
-      formEl.reset();
-    } catch (err) {
-      setMsg(err.message);
-    }
+    signup(name, email, password)
+      .then(response => {
+        console.log("Sign-up successful:", response.data);
+        setStatus("success");
+        setTimeout(() => navigate("/signin"), 1500); // navigate to signin page after 1.5 secs
+      })
+      .catch(error => {
+        console.error("Sign-up error:", error.response ? error.response.data : error.message);
+        
+        if (error.response && error.response.status == 409)
+          setStatus("conflict")
+        else
+          setStatus("error") 
+
+        setTimeout(() => setStatus("idle"), 2000); // revert to idle after 2 secs
+      });
   }
 
   return (
@@ -65,6 +74,7 @@ export default function SignUp() {
                   type="text"
                   placeholder="Your name"
                   className="input input-bordered w-full bg-white/10 text-white placeholder:text-white/40 focus:border-indigo-300 focus:outline-none"
+                  required
                 />
               </label>
 
@@ -75,6 +85,7 @@ export default function SignUp() {
                   type="email"
                   placeholder="you@example.com"
                   className="input input-bordered w-full bg-white/10 text-white placeholder:text-white/40 focus:border-indigo-300 focus:outline-none"
+                  required
                 />
               </label>
 
@@ -85,16 +96,50 @@ export default function SignUp() {
                   type="password"
                   placeholder="Create a secure password"
                   className="input input-bordered w-full bg-white/10 text-white placeholder:text-white/40 focus:border-indigo-300 focus:outline-none"
+                  required
                 />
               </label>
 
-              {msg && (
-                <p className="rounded-xl bg-indigo-500/10 px-4 py-2 text-sm text-indigo-100 text-center">{msg}</p>
-              )}
 
-              <button type="submit" className="btn btn-primary w-full text-base font-semibold">
-                Create account
-              </button>
+              <motion.button
+                type="submit"
+                disabled={status === "loading"}
+                className={`btn w-full text-base font-semibold rounded-xl transition-colors duration-300
+                  ${
+                    {
+                      idle: "btn-primary",
+                      loading: "btn-secondary",
+                      success: "btn-success",
+                      conflict: "btn-warning",
+                      error: "btn-error",
+                    }[status]
+                  }
+                `}
+                // animation upon click
+                whileTap={{ scale: 0.95 }}
+                animate={{ scale: status === "success" ? [1, 1.1, 1] : 1 }}
+                >
+                <AnimatePresence mode="wait">
+                  <motion.span // fades the text in and out 
+                    key={status}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.15, ease: "easeInOut" }}
+                  >
+                    {status === "loading" ? "Signing In..."
+                      : status === "success" ? "✅ Success"
+                        : status === "conflict" ? "Email Taken"
+                          : status === "error" ? "Unknown Error"
+                            : "Create Account" // default
+                    }
+                  </motion.span>
+                </AnimatePresence>
+              </motion.button>
+
+
+
+
             </form>
 
             <div className="mt-8 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80 text-center sm:text-left">
