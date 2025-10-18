@@ -8,6 +8,7 @@ import notepad.security.JwtService;
 
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/users") // prefix
 public class UserController {
@@ -66,22 +68,22 @@ public class UserController {
 
     // USER: create new account
     @PostMapping("/signup")
-    public UserDTO newUser(@RequestBody User user) {
+    public ResponseEntity<UserDTO> newUser(@RequestBody User user) {
 
         if (repo.findByEmail(user.getEmail()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already registered");
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         User newUser = repo.save(user);
 
-        return new UserDTO(newUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new UserDTO(newUser));
     }
 
     // USER: signin to account
     @PostMapping("/signin")
-    public AuthResponseDTO signin(@RequestBody User loginRequest) {
+    public ResponseEntity<AuthResponseDTO> signin(@RequestBody User loginRequest) {
 
         // spring boot automatically knows to find user using email, do not need to create this function
         User user = repo.findByEmail(loginRequest.getEmail())
@@ -89,9 +91,9 @@ public class UserController {
 
         // hashed password check, more secure than plain text check
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         
-        return new AuthResponseDTO(user, jwtService); // returns jwt token, expiry, email, name, userType
+        return ResponseEntity.ok(new AuthResponseDTO(user, jwtService)); // returns jwt token, expiry, email, name, userType
     }
 }
