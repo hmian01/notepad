@@ -91,6 +91,20 @@ export default function EditNote() {
     }));
   };
 
+    const handleContentKeyDown = event => {
+        if (event.key !== "Tab") return;
+        event.preventDefault();
+        const target = event.target;
+        const { selectionStart, selectionEnd, value } = target;
+        const insert = "\t";
+        const updated =
+        value.slice(0, selectionStart) + insert + value.slice(selectionEnd);
+        setNote(prev => ({ ...prev, content: updated }));
+        requestAnimationFrame(() => {
+        target.selectionStart = target.selectionEnd = selectionStart + insert.length;
+        });
+    };
+
   if (!auth) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white">
@@ -192,6 +206,7 @@ export default function EditNote() {
                     name="content"
                     value={note.content}
                     onChange={e => setNote(prev => ({ ...prev, content: e.target.value }))}
+                    onKeyDown={handleContentKeyDown}
                     placeholder="Write or update the note content here…"
                     className="textarea textarea-bordered w-full min-h-[320px] resize-y bg-white/5 text-white placeholder:text-white/40 focus:border-indigo-300 focus:outline-none"
                   />
