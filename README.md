@@ -32,3 +32,4 @@ Capture ideas the moment they strike. Keep them safe in your private space or sh
 ##### Fixes:
 
 - if public note does not exist, display better error message
+- solve issue where footers of note cards on dash are not clickable
