@@ -172,7 +172,7 @@ export default function CreateNote() {
             {/* Content composer */}
             <section className="bg-base-200 shadow-xl rounded-3xl p-6 lg:p-10 space-y-6">
               <div className="bg-base-100 p-6 rounded-2xl">
-                <label className="block text-sm font-semibold text-white/70 mb-3">Content</label>
+                {/* <label className="block text-sm font-semibold text-white/70 mb-3">Content</label> */}
                 <textarea
                   name="content"
                   value={note.content}

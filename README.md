@@ -18,6 +18,10 @@ Capture ideas the moment they strike. Keep them safe in your private space or sh
 
 - functionality to create note without having to register for an account, later should be able to assign this note to your account, and also should still be able to change visibility to public 
 
+- live editing, autosaves to server
+
+- share with specific people, rather than with a link
+
 - favorites tab, heart your favorite notes, should be able to favorite public notes and have them stored 
 
 - ability to fork off a public note and add it to your own account

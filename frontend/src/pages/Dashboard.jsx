@@ -94,7 +94,7 @@ export default function Dashboard() {
                   key={item.id}
                   type="button"
                   onClick={() => setFilter(item.id)}
-                  className={`rounded-full px-4 py-2 text-xs font-semibold transition ${
+                  className={`rounded-full px-4 py-2 text-xs font-semibold transition cursor-pointer ${
                     filter === item.id
                       ? "bg-white/20 text-white"
                       : "text-white/70 hover:text-white hover:bg-white/10"
