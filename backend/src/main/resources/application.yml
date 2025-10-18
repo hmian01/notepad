@@ -5,6 +5,8 @@ spring:
     url: ${DATABASE_URL}
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
+  frontend:
+    origin: ${FRONTEND_URL}
   jpa:
     hibernate:
       ddl-auto: update

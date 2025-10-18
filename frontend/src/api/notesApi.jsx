@@ -1,67 +1,57 @@
 
-export async function loadDashboard(auth) {
-  const res = await fetch(`/api/notes`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json", "Authorization" : `Bearer ${auth.token}`},
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: 'http://localhost:8080/api',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+export function loadDashboard(auth) {
+  return api.get("/notes", {
+    headers: {
+      Authorization: `Bearer ${auth.token}`,
+    },
   });
-  if (!res.ok) {
-    throw new Error("Failed to fetch notes");
-  }
-  return res.json();
 }
 
-export async function addNote(auth, note) {
-  const res = await fetch(`/api/notes`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "Authorization" : `Bearer ${auth.token}`},
-    body: JSON.stringify(note),
+export function addNote(auth, note) {
+  return api.post("/notes", 
+    note,
+    {
+    headers: {
+      Authorization: `Bearer ${auth.token}`,
+    },
   });
-  if (!res.ok) {
-    throw new Error("Failed to add note");
-  }
-  return res.json();
 }
 
-export async function getNote(auth, noteId) {
-  const res = await fetch(`/api/notes/${noteId}`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json", "Authorization" : `Bearer ${auth.token}`},
+export function getNote(auth, noteId) {
+  return api.get(`/notes/${noteId}`, {
+    headers: {
+      Authorization: `Bearer ${auth.token}`,
+    },
   });
-  if (!res.ok) {
-    throw new Error(`Failed to get note #${noteId}`);
-  }
-  return res.json();
 }
 
-export async function updateNote(auth, id, updates) {
-  const res = await fetch(`/api/notes/${id}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json", "Authorization" : `Bearer ${auth.token}`},
-    body: JSON.stringify(updates),
+export function updateNote(auth, id, updates) {
+  return api.patch(`/notes/${id}`, 
+    updates,
+    {
+    headers: {
+      Authorization: `Bearer ${auth.token}`,
+    },
   });
-  if (!res.ok) {
-    throw new Error(`Failed to update note #${id}`);
-  }
-  return res.json();
 }
 
-export async function deleteNote(auth, id) {
-  const res = await fetch(`/api/notes/${id}`, {
-    method: "DELETE",
-    headers: { "Content-Type": "application/json", "Authorization" : `Bearer ${auth.token}`},
+export function deleteNote(auth, id) {
+  return api.delete(`/notes/${id}`, {
+    headers: {
+      Authorization: `Bearer ${auth.token}`,
+    },
   });
-  if (!res.ok) {
-    throw new Error(`Failed to delete note #${id}`);
-  }
-  return res;
 }
 
 export async function getPublicNote(publicId) {
-  const res = await fetch(`/api/notes/public/${publicId}`, {
-    method: "GET",
-  });
-  if (!res.ok) {
-    throw new Error(`Failed to get note #${publicId}`);
-  }
-  return res.json();
+  return api.get(`/notes/public/${publicId}`);
 }
