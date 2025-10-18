@@ -26,3 +26,9 @@ Capture ideas the moment they strike. Keep them safe in your private space or sh
 
 - email verification / email login
 
+
+
+
+##### Fixes:
+
+- if public note does not exist, display better error message
