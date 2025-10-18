@@ -1,4 +1,4 @@
-package notepad;
+package notepad.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

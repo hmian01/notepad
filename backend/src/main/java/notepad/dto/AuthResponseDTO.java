@@ -2,8 +2,8 @@ package notepad.dto;
 
 import java.util.Date;
 
-import notepad.JwtService;
 import notepad.model.User;
+import notepad.security.JwtService;
 
 public class AuthResponseDTO {
 

@@ -1,10 +1,11 @@
 package notepad.controller;
 
-import notepad.JwtService;
 import notepad.dto.AuthResponseDTO;
 import notepad.dto.UserDTO;
 import notepad.model.User;
 import notepad.repository.UserRepository;
+import notepad.security.JwtService;
+
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.http.HttpStatus;
