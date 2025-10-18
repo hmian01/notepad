@@ -9,11 +9,12 @@ const api = axios.create({
 });
 
 export function loadDashboard(auth) {
-  return api.get("/notes", {
-    headers: {
-      Authorization: `Bearer ${auth.token}`,
-    },
-  });
+  return api
+    .get("/notes", {
+      headers: {
+        Authorization: `Bearer ${auth.token}`,
+      },
+    })
 }
 
 export function addNote(auth, note) {

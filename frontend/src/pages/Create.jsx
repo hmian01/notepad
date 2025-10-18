@@ -61,15 +61,18 @@ export default function CreateNote() {
     if (!auth) return;
 
     setStatus("loading");
-    try {
-      const created = await addNote(auth, note);
-      setStatus("success");
-      schedule(() => navigate(`/note/${created.id}`), 900);
-    } catch (err) {
-      console.error("Failed to create note", err);
-      setStatus("error");
-      schedule(() => setStatus("idle"), 1800);
-    }
+
+    addNote(auth, note)
+      .then(response => response.data)
+      .then(data => {
+        setStatus("success");
+        schedule(() => navigate(`/note/${data.id}`), 900);
+      })
+      .catch(err => {
+        console.error("Failed to create note", err);
+        setStatus("error");
+        schedule(() => setStatus("idle"), 1800);
+      })
   };
 
   if (!auth) {

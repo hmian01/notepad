@@ -21,17 +21,16 @@ export default function Note() {
     useEffect(() => {
         if (!auth) return;
         getNote(auth, id)
+            .then(response => response.data)
             .then(setNote)
             .catch(console.error);
     }, [auth, id]);
 
     async function handleDelete() {
-        try {
-            await deleteNote(auth, id);
-            navigate("/dashboard");
-        } catch (err) {
-            console.error("Error deleting note", err);
-        }
+        deleteNote(auth, id)
+            .then(response => response.data)
+            .then(navigate("/dashboard"))
+            .catch(err => console.error("Error deleting note", err))
     }
 
     const handleCopyLink = async () => {
@@ -59,15 +58,15 @@ export default function Note() {
 
     const updateVisibility = async (nextIsPrivate) => {
         if (!auth || !note) return;
-        try {
-            const updated = await updateNote(auth, note.id, { isPrivate: nextIsPrivate });
-            setNote(updated);
-            setPendingVisibility(null);
-            setShowShareModal(false);
-            if (nextIsPrivate) setCopied(false);
-        } catch (err) {
-            console.error("Failed to update visibility", err);
-        }
+        updateNote(auth, note.id, { isPrivate: nextIsPrivate })
+            .then(response => response.data)
+            .then(data => {
+                setNote(data);
+                setPendingVisibility(null);
+                setShowShareModal(false);
+                if (nextIsPrivate) setCopied(false);
+            })
+            .catch(err => console.error("Failed to update visibility", err))
     };
 
     const handleVisibilityToggle = (nextIsPrivate) => {

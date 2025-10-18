@@ -29,6 +29,7 @@ export default function Dashboard() {
 
     setLoading(true);
     loadDashboard(auth)
+      .then(response => response.data)
       .then(setNotes)
       .catch(err => setError(err.message))
       .finally(() => setLoading(false));
@@ -152,11 +153,12 @@ export default function Dashboard() {
                   setLoading(true);
                   setError(null);
                   loadDashboard(auth)
+                    .then(response => response.data)
                     .then(setNotes)
                     .catch(err => setError(err.message))
                     .finally(() => setLoading(false));
                 }}
-                className="inline-flex items-center rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/20 transition"
+                className="inline-flex items-center rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/20 transition cursor-pointer"
               >
                 Try again
               </button>

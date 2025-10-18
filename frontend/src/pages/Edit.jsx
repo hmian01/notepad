@@ -23,6 +23,7 @@ export default function EditNote() {
 
     setLoading(true);
     getNote(auth, id)
+      .then(response => response.data)
       .then(data => {
         setNote({
           title: data.title,
@@ -65,19 +66,22 @@ export default function EditNote() {
     if (!auth) return;
 
     setStatus("loading");
-    try {
-      await updateNote(auth, id, {
-        title: note.title,
-        content: note.content,
-        isPrivate: note.isPrivate,
-      });
-      setStatus("success");
+
+    updateNote(auth, id, {
+      title: note.title,
+      content: note.content,
+      isPrivate: note.isPrivate,
+    })
+    .then(response => response.data)
+    .then(data => {
+        setStatus("success");
       schedule(() => navigate(`/note/${id}`), 800);
-    } catch (err) {
+    })
+    .catch(err => {
       console.error("Failed to update note", err);
       setStatus("error");
       schedule(() => setStatus("idle"), 1800);
-    }
+    })
   };
 
   const handleCancel = () => {

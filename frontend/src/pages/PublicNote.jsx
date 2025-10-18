@@ -14,6 +14,7 @@ export default function PublicNote() {
     setLoading(true);
     setError(null);
     getPublicNote(publicId)
+      .then(response => response.data)
       .then(setNote)
       .catch(err => setError(err.message))
       .finally(() => setLoading(false));
