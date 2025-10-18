@@ -3,30 +3,40 @@ import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signin } from "../api/authApi";
 import { AuthContext } from "../context/AuthContext";
+import { motion, AnimatePresence } from "framer-motion";
+
 import "../index.css";
 
 export default function SignIn() {
   const navigate = useNavigate();
-  const [msg, setMsg] = useState("");
+  const [status, setStatus] = useState("idle"); // idle | loading | success | conflict | error
   const { login } = useContext(AuthContext);
 
   async function onSubmit(e) {
     e.preventDefault();
-    setMsg("");
 
     const formEl = e.currentTarget;
     const form = new FormData(formEl);
     const email = form.get("email");
     const password = form.get("password");
-    if (!email || !password) return setMsg("email and password required");
 
-    try {
-      const auth = await signin({ email, password });
-      login(auth);
-      navigate("/dashboard");
-    } catch (err) {
-      setMsg(err.message);
-    }
+    signin(email, password)
+      .then(response => {
+        console.log("Sign-in successful:", response.data);
+        setStatus("success");
+        login(response.data); // adds to localStorage
+        setTimeout(() => navigate("/dashboard"), 1000); // navigate to dashboard after 1 sec
+      })
+      .catch(error => {
+        console.error("Sign-in error:", error.response ? error.response.data : error.message);
+        
+        setStatus("error")
+        if (error.response)
+          error.response.status == 401 ? setStatus("invalidCreds")
+            : error.response.status == 404 && setStatus("accountNotFound")
+
+        setTimeout(() => setStatus("idle"), 1500); // revert to idle after 1.5 secs
+      });
   }
 
   return (
@@ -80,13 +90,48 @@ export default function SignIn() {
                 />
               </label>
 
-              {msg && (
-                <p className="rounded-xl bg-red-500/10 px-4 py-2 text-sm text-red-200 text-center">{msg}</p>
-              )}
+              <motion.button
+                type="submit"
+                disabled={status === "loading"}
+                className={`btn w-full text-base font-semibold rounded-xl transition-colors duration-300
+                  ${
+                    {
+                      idle: "btn-primary",
+                      loading: "btn-secondary",
+                      success: "btn-success",
+                      invalidCreds: "btn-error",
+                      accountNotFound: "btn-error",
+                      error: "btn-error",
+                    }[status]
+                  }
+                `}
+                // animation upon click
+                whileTap={{ scale: 0.95 }}
+                animate={{ scale: status === "success" ? [1, 1.1, 1] : 1 }}
+                >
+                <AnimatePresence mode="wait">
+                  <motion.span // fades the text in and out 
+                    key={status}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    {status === "loading" ? "Signing In..."
+                      : status === "success" ? "✅ Success"
+                        : status === "invalidCreds" ? "Invalid Credentials"
+                          : status === "accountNotFound" ? "Account Not Found"
+                            : status === "error" ? "Unknown Error"
+                              : "Sign In" // default
+                    }
+                  </motion.span>
+                </AnimatePresence>
+              </motion.button>
 
-              <button type="submit" className="btn btn-primary w-full text-base font-semibold">
-                Sign in
-              </button>
+
+
+
+
+
             </form>
 
             <div className="mt-8 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80 text-center sm:text-left">
