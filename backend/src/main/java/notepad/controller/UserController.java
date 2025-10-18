@@ -3,6 +3,8 @@ package notepad.controller;
 import notepad.dto.AuthResponseDTO;
 import notepad.dto.UserDTO;
 import notepad.model.User;
+import notepad.model.Note;
+import notepad.repository.NoteRepository;
 import notepad.repository.UserRepository;
 import notepad.security.JwtService;
 
@@ -14,8 +16,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -23,12 +27,14 @@ import java.util.List;
 public class UserController {
 
     private final UserRepository repo;
+    private final NoteRepository noteRepo;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final JwtService jwtService;
 
-    public UserController(UserRepository repo, JwtService jwtService) {
+    public UserController(UserRepository repo, JwtService jwtService, NoteRepository noteRepo) {
         this.repo = repo;
         this.jwtService = jwtService;
+        this.noteRepo = noteRepo;
     }
 
     private User getAuthenticatedUser() {
@@ -67,16 +73,16 @@ public class UserController {
     }
 
     // USER: create new account
+    @Transactional
     @PostMapping("/signup")
     public ResponseEntity<UserDTO> newUser(@RequestBody User user) {
 
         if (repo.findByEmail(user.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
         User newUser = repo.save(user);
+        createDefaultNoteUponSignUp(newUser);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new UserDTO(newUser));
     }
@@ -95,5 +101,20 @@ public class UserController {
         }
         
         return ResponseEntity.ok(new AuthResponseDTO(user, jwtService)); // returns jwt token, expiry, email, name, userType
+    }
+
+    private void createDefaultNoteUponSignUp(User user) {
+        Note note = new Note();
+        note.setUser(user);
+        note.setTitle("👋 Welcome to Notepad!");
+        note.setContent("This is your first note — a blank space to capture thoughts, ideas, or reminders.\n" + //
+                        "\n" + //
+                        "Try editing this note or creating a new one to get started.");
+        String publicId;
+        do {
+            publicId = UUID.randomUUID().toString().substring(0, 8);
+        } while (noteRepo.existsByPublicId(publicId));
+        note.setPublicId(publicId);
+        noteRepo.save(note);
     }
 }

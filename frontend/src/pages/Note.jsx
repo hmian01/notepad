@@ -174,11 +174,11 @@ export default function Note() {
 
                         {/* Note content */}
                         <section className="bg-base-200 shadow-xl rounded-3xl p-6 lg:p-10 space-y-6">
-                            <div className="bg-base-100 p-6 rounded-2xl relative">
+                            <div className="bg-base-100 p-6 rounded-2xl flow-root">
                                 <button
                                     type="button"
                                     onClick={handleCopyContent}
-                                    className="absolute top-4 right-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white hover:bg-white/20 transition cursor-pointer"
+                                    className="float-right w-23 py-2 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white hover:bg-white/20 transition cursor-pointer"
                                     aria-label="Copy note content"
                                 >
                                     <svg
@@ -192,8 +192,8 @@ export default function Note() {
                                     </svg>
                                     <span>{contentCopied ? "Copied" : "Copy"}</span>
                                 </button>
-                                <div className="prose prose-invert max-w-none">
-                                    <pre className="whitespace-pre-wrap break-words text-white leading-relaxed">{note.content}</pre>
+                                <div className="prose prose-invert max-w-none mt-3">
+                                    <div className="whitespace-pre-wrap break-words text-white leading-relaxed">{note.content}</div>
                                 </div>
                             </div>
                         </section>

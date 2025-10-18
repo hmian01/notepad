@@ -60,7 +60,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 py-16 px-4 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 py-16 px-4 text-white">
       <div className="max-w-6xl mx-auto w-full space-y-10">
         {/* Hero */}
         <header className="space-y-4">
