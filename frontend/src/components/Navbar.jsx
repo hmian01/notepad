@@ -5,8 +5,8 @@ import { AuthContext } from "../context/AuthContext";
 const desktopLinkBase =
   "text-sm font-medium transition px-1 pb-1 border-b-2 border-transparent text-indigo-200 hover:text-white hover:border-indigo-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900";
 const mobileLinkBase = "block rounded-md px-3 py-2 text-sm text-indigo-200 hover:bg-white/10";
-const logoutPill =
-  "inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900";
+const logoutButton =
+  "inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white/80 hover:text-white hover:border-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 transition cursor-pointer";
 
 export default function Navbar() {
   const location = useLocation();
@@ -106,7 +106,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-40 bg-gradient-to-r from-slate-950 via-slate-950/95 to-slate-900/90 text-white shadow-sm shadow-indigo-500/20 backdrop-blur">
+    <nav className="sticky top-0 z-40 bg-slate-950/95 text-white shadow-sm border-b border-white/10 backdrop-blur">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center gap-2" onClick={closeMenu}>
@@ -124,7 +124,7 @@ export default function Navbar() {
                 </div>
                 <div className="flex items-center gap-4">
                   <span className="text-sm text-indigo-200">Hi, {auth.name}</span>
-                  <button type="button" onClick={handleLogout} className={logoutPill}>
+                  <button type="button" onClick={handleLogout} className={logoutButton}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -178,7 +178,7 @@ export default function Navbar() {
                   <button
                     type="button"
                     onClick={handleLogout}
-                    className={`${logoutPill} w-full justify-center`}
+                    className={`${logoutButton} w-full justify-center`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
