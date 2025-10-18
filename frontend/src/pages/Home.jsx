@@ -6,8 +6,8 @@ import "../index.css";
 
 const features = [
   {
-    title: "Secure note & code storage",
-    description: "Keep every draft and snippet protected in your private workspace so nothing gets lost in shared folders.",
+    title: "Secure note storage",
+    description: "Keep every draft protected in your private workspace so nothing gets lost in shared folders.",
   },
   {
     title: "Instant shareable links",
@@ -30,13 +30,13 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 text-white">
       <section className="max-w-6xl mx-auto px-6 md:px-12 py-20 flex flex-col lg:flex-row items-center gap-12">
         <div className="w-full lg:w-1/2 space-y-6">
-          <p className="text-sm uppercase tracking-[0.3em] text-white/70">Secure notes and code</p>
+          <p className="text-sm uppercase tracking-[0.3em] text-white/70">Share notes instantly</p>
           <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight">
-            A focused notepad for everyday work
+            Welcome to Notepad
           </h1>
           <p className="text-white/80 text-lg leading-relaxed">
-            Capture thoughts the moment they happen, paste in code snippets that stay private, and share instant read-only links when you need feedback.
-            You can even start jotting ideas before creating an account—sign up later to keep everything in sync.
+            Capture ideas the moment they strike. Keep them safe in your private space or share them instantly with a secure link.
+            From project plans to personal notes, snippets of code to daily reflections — Notepad keeps everything safe, organized, and ready whenever you are.
           </p>
           <div className="flex flex-col sm:flex-row gap-3">
             <Link to={primaryCta} className="btn btn-primary px-8 py-3 text-base font-semibold">
@@ -49,11 +49,11 @@ export default function Home() {
           <div className="flex gap-8 pt-4">
             <div>
               <p className="text-3xl font-bold">Secure</p>
-              <p className="text-sm text-white/80">Private workspace for drafts and snippets</p>
+              <p className="text-sm text-white/80">Private workspace for drafts and reminders</p>
             </div>
             <div>
-              <p className="text-3xl font-bold">Link-ready</p>
-              <p className="text-sm text-white/80">Instant sharing with public URLs</p>
+              <p className="text-3xl font-bold">Link-Ready</p>
+              <p className="text-sm text-white/80">Share Instantly via secure public URLs, remove public access at anytime</p>
             </div>
           </div>
         </div>
@@ -62,14 +62,14 @@ export default function Home() {
           <div className="bg-black/50 border border-white/15 rounded-3xl shadow-2xl backdrop-blur-sm p-8 max-w-lg mx-auto">
             <div className="flex items-center justify-between text-xs text-white/70 mb-6">
               <span>Today</span>
-              <span>Personal workspace</span>
+              <span>Private</span>
             </div>
-            <h3 className="text-2xl font-semibold mb-4">Code snippet: note search</h3>
+            <h3 className="text-2xl text-center font-semibold mb-4">Daily plan: morning checklist</h3>
             <div className="space-y-4 bg-white/5 rounded-2xl p-5">
               <div>
                 <p className="text-xs uppercase tracking-wide text-white/60 mb-1">Focus</p>
                 <p className="text-sm leading-relaxed text-white/90">
-                  Store reusable snippets alongside documentation so the team can copy without digging through repos.
+                  Keep mornings on track with quick reminders you can check off as you go.
                 </p>
               </div>
               <div>
@@ -77,26 +77,18 @@ export default function Home() {
                 <ul className="space-y-2 text-sm text-white/90">
                   <li className="flex items-start gap-2">
                     <span className="mt-1 h-2 w-2 rounded-full bg-emerald-400" aria-hidden="true"></span>
-                    <pre className="font-mono text-xs bg-black/60 rounded-md px-3 py-2 w-full flex-1 whitespace-pre overflow-x-auto">
-{`const matches = notes.filter(note =>
-  note.content.toLowerCase().includes(query)
-);`}
-                    </pre>
+                    Brew coffee and review today’s priorities
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="mt-1 h-2 w-2 rounded-full bg-violet-300" aria-hidden="true"></span>
-                    Share read-only link with QA for quick review
+                    Send quick update message to the team
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="mt-1 h-2 w-2 rounded-full bg-sky-300" aria-hidden="true"></span>
-                    Add comments after sign-in to keep feedback consolidated
+                    Pack lunch and set reminder for afternoon walk
                   </li>
                 </ul>
               </div>
-            </div>
-            <div className="mt-6 flex items-center justify-between text-xs text-white/70 bg-white/5 rounded-2xl p-4">
-              <span>Shared with: product-team</span>
-              <span>Auto-saved</span>
             </div>
           </div>
         </div>
