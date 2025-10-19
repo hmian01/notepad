@@ -22,6 +22,8 @@ public class Note {
 
     @Column(columnDefinition = "TEXT")
     private String title;
+    
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     private Boolean isPrivate = true; // defaults to private
