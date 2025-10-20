@@ -14,6 +14,7 @@ export default function SignIn() {
 
   async function onSubmit(e) {
     e.preventDefault();
+    setStatus("loading");
 
     const formEl = e.currentTarget;
     const form = new FormData(formEl);
